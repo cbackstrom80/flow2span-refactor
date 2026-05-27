@@ -1,0 +1,307 @@
+receivers:
+  netflow:
+    scheme: netflow
+    hostname: 0.0.0.0
+    port: 2055
+    sockets: 4
+    workers: 8
+    queue_size: 10000
+
+connectors:
+  flow2span:
+    # POC defaults. Production can load the same shape with 72 site records.
+    window: 30s
+    flush_lag: 5s
+    max_spans_per_flush: 5000
+    max_buckets_in_memory: 240
+    # deployment.environment value is supplied from the collector process environment.
+    # Docker defaults DEPLOYMENT_ENVIRONMENT to "poc" in docker-compose.yml.
+    environment: ${env:DEPLOYMENT_ENVIRONMENT}
+    environment_key: ${env:DEPLOYMENT_ENVIRONMENT_KEY}
+
+    # NetFlow receiver log attribute names. Adjust these if your receiver version emits different names.
+    source_address_key: source.address
+    destination_address_key: destination.address
+    source_port_key: source.port
+    destination_port_key: destination.port
+    transport_key: network.transport
+    bytes_key: flow.io.bytes
+    packets_key: flow.io.packets
+    start_key: flow.start
+    end_key: flow.end
+    tcp_flags_key: flow.tcp_flags
+    exporter_ip_key: flow.sampler_address
+
+    qos:
+      enabled: true
+      # NetFlow v5 carries the IPv4 ToS byte. DSCP is derived as ToS >> 2.
+      # If your receiver emits a different key, set source_attribute accordingly.
+      source_attribute: flow.tos
+      fallback_attributes: [network.tos, ip.tos, netflow.tos, flow.dscp, network.dscp, dscp]
+      derive_dscp_from_tos: true
+      emit_on_metrics: true
+      emit_on_top_talker_metrics: true
+      emit_on_link_qos_metrics: true
+      emit_on_traces: true
+      focus_classes: [voice, video]
+
+    # Site inventory: POC has 3. Production has 72 using the same schema.
+    sites:
+      - name: site-001
+        display_name: US BRANCH 1
+        region: west
+        role: branch
+        direction_class: internal
+        cidrs: [10.1.0.0/16]
+      - name: site-002
+        display_name: EUROPE 1
+        region: canada-west
+        role: branch
+        direction_class: internal
+        cidrs: [10.2.0.0/16]
+      - name: site-003
+        display_name: DATACENTER US
+        region: mountain
+        role: datacenter
+        direction_class: internal
+        cidrs: [10.3.0.0/16]
+
+    exporters:
+      - name: fw-site-001
+        ip: 10.1.0.5
+        role: firewall
+        site: site-001
+        vendor: paloalto
+        priority: 100
+        trust_level: 100
+      - name: sdwan-site-001
+        ip: 10.1.0.1
+        role: sdwan_router
+        site: site-001
+        vendor: meraki
+        priority: 80
+        trust_level: 80
+      - name: fw-site-002
+        ip: 10.2.0.5
+        role: firewall
+        site: site-002
+        vendor: paloalto
+        priority: 100
+        trust_level: 100
+      - name: sdwan-site-002
+        ip: 10.2.0.1
+        role: sdwan_router
+        site: site-002
+        vendor: meraki
+        priority: 80
+        trust_level: 80
+      - name: dc-edge-003
+        ip: 10.3.0.1
+        role: edge_router
+        site: site-003
+        vendor: cisco
+        priority: 90
+        trust_level: 90
+
+    links:
+      - name: site-001-wan-primary
+        site: site-001
+        direction: wan
+        provider: comcast
+        circuit_id: COMCAST-001
+        router: sdwan-site-001
+        interface: wan1
+        exporter: sdwan-site-001
+        speed: 500Mbps
+        warning_utilization_percent: 70
+        critical_utilization_percent: 85
+      - name: site-001-lte-backup
+        site: site-001
+        direction: wan
+        provider: verizon
+        circuit_id: LTE-001
+        router: sdwan-site-001
+        interface: wan2
+        exporter: sdwan-site-001
+        speed: 50Mbps
+        warning_utilization_percent: 60
+        critical_utilization_percent: 80
+      - name: site-002-wan-primary
+        site: site-002
+        direction: wan
+        provider: telus
+        circuit_id: TELUS-002
+        router: sdwan-site-002
+        interface: wan1
+        exporter: sdwan-site-002
+        speed: 1Gbps
+        warning_utilization_percent: 70
+        critical_utilization_percent: 85
+      - name: site-003-dc-internet
+        site: site-003
+        direction: internet
+        provider: lumen
+        circuit_id: LUMEN-003
+        router: dc-edge-003
+        interface: xe-0/0/0
+        exporter: dc-edge-003
+        speed: 10Gbps
+        warning_utilization_percent: 75
+        critical_utilization_percent: 90
+
+    client_communities:
+      - name: site-001-users
+        site: site-001
+        region: west
+        role: users
+        cidrs: [10.1.10.0/24]
+      - name: site-001-pos
+        site: site-001
+        region: west
+        role: pos
+        cidrs: [10.1.50.0/24]
+      - name: site-002-users
+        site: site-002
+        region: canada-west
+        role: users
+        cidrs: [10.2.10.0/24]
+      - name: site-002-iot
+        site: site-002
+        region: canada-west
+        role: iot
+        cidrs: [10.2.60.0/24]
+
+    server_communities:
+      - name: payment-services
+        site: site-003
+        region: mountain
+        role: app_tier
+        cidrs: [10.3.30.0/24]
+        services: [payment-api, auth-api]
+      - name: database-services
+        site: site-003
+        region: mountain
+        role: db_tier
+        cidrs: [10.3.40.0/24]
+        services: [postgres, redis]
+      - name: dns-services
+        site: site-003
+        region: mountain
+        role: infrastructure
+        cidrs: [10.3.53.0/24]
+        services: [dns]
+
+    application_rules:
+      - name: dns
+        dst_ports: [53]
+        protocols: [udp, tcp]
+        dns_contains: [dns]
+      - name: payment-api
+        dst_ports: [443]
+        dns_contains: [payment, pay-api]
+        dst_cidrs: [10.3.30.0/24]
+      - name: postgres
+        dst_ports: [5432]
+        dns_contains: [postgres, pg]
+        dst_cidrs: [10.3.40.0/24]
+      - name: redis
+        dst_ports: [6379]
+        dns_contains: [redis]
+        dst_cidrs: [10.3.40.0/24]
+      - name: https
+        dst_ports: [443]
+
+    deduplication:
+      enabled: true
+      window: 30s
+      strategy: prefer_highest_priority
+      bidirectional: true
+      normalize_nat: false
+      match_tolerance_percent: 15
+      packet_tolerance_percent: 20
+      include_dedupe_attributes: true
+      priority_roles:
+        firewall: 100
+        edge_router: 90
+        sdwan_router: 80
+        core_router: 70
+        switch: 50
+        unknown: 10
+      scopes:
+        site_traffic: prefer_highest_priority
+        link_utilization: prefer_link_exporter
+        top_talkers: prefer_highest_priority
+
+    service_map:
+      enabled: true
+      node_type: endpoint_dns
+      include_application_span: false
+      emit_peer_service_links: true
+      service_namespace: flow2span.network_site
+
+    dns:
+      enabled: true
+      lookup_mode: reverse
+      timeout: 250ms
+      max_concurrent_lookups: 50
+      cache_ttl: 24h
+      negative_cache_ttl: 10m
+      lookup_private_ips: true
+      lookup_public_ips: false
+      include_dns_attributes: true
+      include_unresolved_attribute: true
+      sanitize_names: true
+      strip_trailing_dot: true
+      block_on_lookup: false
+      emit_on_top_talker_metrics: true
+      emit_on_represented_traces: true
+
+    top_talkers:
+      enabled: true
+      limit: 20
+      rank_by: bytes
+      scopes: [global, site, link, community_dependency]
+      emit_metrics: true
+      emit_traces: true
+      include_trace_id_attribute: false
+      include_span_id_attribute: false
+      drop_trace_id_dimension_for_metrics: true
+      include_dedupe_dimensions: true
+      max_series_per_window: 10000
+
+processors:
+  memory_limiter:
+    check_interval: 2s
+    limit_mib: 2048
+  batch: {}
+
+exporters:
+  debug:
+    verbosity: detailed
+
+  # Metrics/events to Splunk Observability Cloud.
+  signalfx:
+    access_token: ${env:SPLUNK_ACCESS_TOKEN}
+    realm: ${env:SPLUNK_REALM}
+
+  # Traces to Splunk APM using OTLP/HTTP. This is the most reliable path
+  # for custom collectors because the endpoint is explicit.
+  otlphttp/splunktraces:
+    traces_endpoint: https://ingest.${env:SPLUNK_REALM}.signalfx.com/v2/trace/otlp
+    headers:
+      X-SF-TOKEN: ${env:SPLUNK_ACCESS_TOKEN}
+
+service:
+  pipelines:
+    logs:
+      receivers: [netflow]
+      processors: [memory_limiter, batch]
+      exporters: [flow2span]
+    traces:
+      receivers: [flow2span]
+      processors: [batch]
+      exporters: [debug, otlphttp/splunktraces]
+    metrics:
+      receivers: [flow2span]
+      processors: [batch]
+      exporters: [debug, signalfx]

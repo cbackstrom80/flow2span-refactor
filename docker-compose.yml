@@ -1,0 +1,42 @@
+services:
+  collector:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.collector
+      args:
+        OCB_VERSION: v0.149.0
+    container_name: flow2span-collector
+    command: ["--config=/etc/flow2span/config/collector-config-poc.yaml"]
+    ports:
+      - "2055:2055/udp"   # NetFlow v5/v9 test traffic
+      - "4739:4739/udp"   # IPFIX, reserved for later tests
+      - "6343:6343/udp"   # sFlow, reserved for later tests
+      - "4317:4317"       # OTLP gRPC, if enabled later
+      - "4318:4318"       # OTLP HTTP, if enabled later
+      - "8888:8888"       # Collector telemetry, if enabled
+    volumes:
+      - ./config:/etc/flow2span/config:ro
+    environment:
+      SPLUNK_REALM: ${SPLUNK_REALM:-us1}
+      SPLUNK_ACCESS_TOKEN: ${SPLUNK_ACCESS_TOKEN:-}
+      DEPLOYMENT_ENVIRONMENT: ${DEPLOYMENT_ENVIRONMENT:-poc}
+      DEPLOYMENT_ENVIRONMENT_KEY: ${DEPLOYMENT_ENVIRONMENT_KEY:-deployment.environment}
+    restart: unless-stopped
+
+  generator:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.generator
+    container_name: flow2span-generator
+    depends_on:
+      - collector
+    cap_add:
+      - NET_ADMIN
+    environment:
+      TARGET_HOST: collector
+      TARGET_PORT: "2055"
+      DURATION: "120"
+      RATE: "8"
+      USE_LOOPBACK_EXPORTERS: "true"
+    profiles:
+      - test

@@ -1,0 +1,40 @@
+exporters:
+  - name: fw-site-001
+    ip: 10.1.0.5
+    role: firewall
+    site: site-001
+    vendor: paloalto
+    priority: 100
+    trust_level: 100
+
+  - name: sdwan-site-001
+    ip: 10.1.0.1
+    role: sdwan_router
+    site: site-001
+    vendor: meraki
+    priority: 80
+    trust_level: 80
+
+  - name: fw-site-002
+    ip: 10.2.0.5
+    role: firewall
+    site: site-002
+    vendor: paloalto
+    priority: 100
+    trust_level: 100
+
+  - name: sdwan-site-002
+    ip: 10.2.0.1
+    role: sdwan_router
+    site: site-002
+    vendor: meraki
+    priority: 80
+    trust_level: 80
+
+  - name: dc-edge-003
+    ip: 10.3.0.1
+    role: edge_router
+    site: site-003
+    vendor: cisco
+    priority: 90
+    trust_level: 90

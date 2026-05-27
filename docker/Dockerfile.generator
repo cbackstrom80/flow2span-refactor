@@ -1,0 +1,23 @@
+# Synthetic NetFlow v5 traffic generator for the 3-site Flow2Span POC.
+
+FROM python:3.12-slim-bookworm
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends iproute2 bash \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /opt/flow2span-poc
+COPY scripts /opt/flow2span-poc/scripts
+COPY config /opt/flow2span-poc/config
+COPY docker/generator-entrypoint.sh /usr/local/bin/generator-entrypoint.sh
+
+RUN chmod +x /usr/local/bin/generator-entrypoint.sh \
+    && chmod +x /opt/flow2span-poc/scripts/*.sh || true
+
+ENV TARGET_HOST=collector
+ENV TARGET_PORT=2055
+ENV DURATION=120
+ENV RATE=8
+ENV USE_LOOPBACK_EXPORTERS=true
+
+ENTRYPOINT ["/usr/local/bin/generator-entrypoint.sh"]

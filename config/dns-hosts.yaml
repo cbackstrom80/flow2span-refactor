@@ -1,0 +1,13 @@
+# Optional static DNS hints for dashboards/tests. The POC connector also supports reverse DNS lookup.
+hosts:
+  10.1.10.11: user-011.site001.example.local
+  10.1.10.12: user-012.site001.example.local
+  10.1.50.44: pos-044.site001.example.local
+  10.1.50.45: pos-045.site001.example.local
+  10.2.10.21: user-021.site002.example.local
+  10.2.60.31: iot-031.site002.example.local
+  10.3.30.15: payment-api-01.site003.example.local
+  10.3.30.16: auth-api-01.site003.example.local
+  10.3.40.20: postgres-01.site003.example.local
+  10.3.40.21: redis-01.site003.example.local
+  10.3.53.10: dns-01.site003.example.local

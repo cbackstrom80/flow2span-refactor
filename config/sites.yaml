@@ -1,0 +1,33 @@
+sites:
+  - name: site-001
+    display_name: US BRANCH 1
+    region: west
+    role: branch
+    direction_class: internal
+    cidrs:
+      - 10.1.0.0/16
+    labels:
+      environment: poc
+      site.count.model: three-site-poc-to-72-prod
+
+  - name: site-002
+    display_name: EUROPE 1
+    region: canada-west
+    role: branch
+    direction_class: internal
+    cidrs:
+      - 10.2.0.0/16
+    labels:
+      environment: poc
+      site.count.model: three-site-poc-to-72-prod
+
+  - name: site-003
+    display_name: DATACENTER US
+    region: mountain
+    role: datacenter
+    direction_class: internal
+    cidrs:
+      - 10.3.0.0/16
+    labels:
+      environment: poc
+      site.count.model: three-site-poc-to-72-prod

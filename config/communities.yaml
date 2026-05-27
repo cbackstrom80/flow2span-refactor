@@ -1,0 +1,58 @@
+client_communities:
+  - name: site-001-users
+    site: site-001
+    region: west
+    role: users
+    cidrs:
+      - 10.1.10.0/24
+
+  - name: site-001-pos
+    site: site-001
+    region: west
+    role: pos
+    cidrs:
+      - 10.1.50.0/24
+
+  - name: site-002-users
+    site: site-002
+    region: canada-west
+    role: users
+    cidrs:
+      - 10.2.10.0/24
+
+  - name: site-002-iot
+    site: site-002
+    region: canada-west
+    role: iot
+    cidrs:
+      - 10.2.60.0/24
+
+server_communities:
+  - name: payment-services
+    site: site-003
+    region: mountain
+    role: app_tier
+    cidrs:
+      - 10.3.30.0/24
+    services:
+      - payment-api
+      - auth-api
+
+  - name: database-services
+    site: site-003
+    region: mountain
+    role: db_tier
+    cidrs:
+      - 10.3.40.0/24
+    services:
+      - postgres
+      - redis
+
+  - name: dns-services
+    site: site-003
+    region: mountain
+    role: infrastructure
+    cidrs:
+      - 10.3.53.0/24
+    services:
+      - dns

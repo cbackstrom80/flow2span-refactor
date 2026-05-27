@@ -1,0 +1,9 @@
+# Optional override: use debug logging and shorter generator runs.
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.debug-exporters.yml --profile test up --build
+
+services:
+  generator:
+    environment:
+      DURATION: "60"
+      RATE: "4"

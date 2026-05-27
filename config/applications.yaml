@@ -1,0 +1,26 @@
+application_rules:
+  - name: dns
+    dst_ports: [53]
+    protocols: [udp, tcp]
+    dns_contains: [dns]
+
+  - name: payment-api
+    dst_ports: [443]
+    dns_contains: [payment, pay-api]
+    dst_cidrs:
+      - 10.3.30.0/24
+
+  - name: postgres
+    dst_ports: [5432]
+    dns_contains: [postgres, pg]
+    dst_cidrs:
+      - 10.3.40.0/24
+
+  - name: redis
+    dst_ports: [6379]
+    dns_contains: [redis]
+    dst_cidrs:
+      - 10.3.40.0/24
+
+  - name: https
+    dst_ports: [443]

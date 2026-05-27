@@ -1,0 +1,34 @@
+# Flow2Span custom collector build image.
+# Build from this bundle root OR from the real flow2span repo root as long as builder-config.yaml exists.
+# OTel Collector Builder v0.149.0 requires Go >= 1.25.0.
+
+ARG GO_IMAGE=golang:1.25-bookworm
+FROM ${GO_IMAGE} AS builder
+
+ARG OCB_VERSION=v0.149.0
+WORKDIR /src
+
+COPY . .
+
+RUN go version
+RUN test -f builder-config.yaml || (echo 'ERROR: builder-config.yaml is missing from Docker build context root.' && echo 'Run docker compose from the directory containing docker-compose.yml and builder-config.yaml.' && find . -maxdepth 3 -type f | sort | sed -n '1,120p' && exit 1)
+RUN test -d connector/flow2spanconnector || (echo 'ERROR: connector/flow2spanconnector is missing from Docker build context.' && exit 1)
+RUN go install go.opentelemetry.io/collector/cmd/builder@${OCB_VERSION}
+RUN /go/bin/builder --skip-strict-versioning --config=builder-config.yaml
+RUN test -f /src/dist/netflowotelcol || (echo 'ERROR: expected builder output /src/dist/netflowotelcol not found.' && echo 'Files under /src/dist:' && find /src/dist -maxdepth 3 -type f -print && exit 1)
+
+FROM debian:bookworm-slim
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates tzdata \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /opt/flow2span
+
+COPY --from=builder /src/dist/netflowotelcol /opt/flow2span/bin/netflowotelcol
+COPY config /etc/flow2span/config
+
+EXPOSE 2055/udp 4739/udp 6343/udp 4317 4318 8888
+
+ENTRYPOINT ["/opt/flow2span/bin/netflowotelcol"]
+CMD ["--config=/etc/flow2span/config/collector-config-poc.yaml"]

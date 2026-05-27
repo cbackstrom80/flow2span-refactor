@@ -1,0 +1,29 @@
+# OpenTelemetry Collector Builder config for the Flow2Span site POC.
+# This file must live at the Docker build context root, next to docker-compose.yml.
+# It builds ./dist/netflowotelcol, which docker/Dockerfile.collector copies into the runtime image.
+
+dist:
+  module: github.com/cbackstrom80/flow2span-poc-collector
+  name: netflowotelcol
+  description: Flow2Span POC Collector with NetFlow receiver and Flow2Span connector
+  version: 0.1.0-poc
+  output_path: ./dist
+  otelcol_version: 0.149.0
+
+receivers:
+  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/receiver/netflowreceiver v0.149.0
+
+processors:
+  - gomod: go.opentelemetry.io/collector/processor/batchprocessor v0.149.0
+  - gomod: go.opentelemetry.io/collector/processor/memorylimiterprocessor v0.149.0
+
+exporters:
+  - gomod: go.opentelemetry.io/collector/exporter/debugexporter v0.149.0
+  - gomod: go.opentelemetry.io/collector/exporter/otlpexporter v0.149.0
+  - gomod: go.opentelemetry.io/collector/exporter/otlphttpexporter v0.149.0
+  # Native SignalFx/Splunk Observability exporter support. Required when collector config uses exporters: signalfx.
+  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/exporter/signalfxexporter v0.149.0
+
+connectors:
+  - gomod: github.com/cbackstrom80/flow2span/connector/flow2spanconnector v0.0.0
+    path: ./connector/flow2spanconnector

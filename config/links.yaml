@@ -1,0 +1,48 @@
+links:
+  - name: site-001-wan-primary
+    site: site-001
+    direction: wan
+    provider: comcast
+    circuit_id: COMCAST-001
+    router: sdwan-site-001
+    interface: wan1
+    exporter: sdwan-site-001
+    speed: 500Mbps
+    warning_utilization_percent: 70
+    critical_utilization_percent: 85
+
+  - name: site-001-lte-backup
+    site: site-001
+    direction: wan
+    provider: verizon
+    circuit_id: LTE-001
+    router: sdwan-site-001
+    interface: wan2
+    exporter: sdwan-site-001
+    speed: 50Mbps
+    warning_utilization_percent: 60
+    critical_utilization_percent: 80
+
+  - name: site-002-wan-primary
+    site: site-002
+    direction: wan
+    provider: telus
+    circuit_id: TELUS-002
+    router: sdwan-site-002
+    interface: wan1
+    exporter: sdwan-site-002
+    speed: 1Gbps
+    warning_utilization_percent: 70
+    critical_utilization_percent: 85
+
+  - name: site-003-dc-internet
+    site: site-003
+    direction: internet
+    provider: lumen
+    circuit_id: LUMEN-003
+    router: dc-edge-003
+    interface: xe-0/0/0
+    exporter: dc-edge-003
+    speed: 10Gbps
+    warning_utilization_percent: 75
+    critical_utilization_percent: 90
