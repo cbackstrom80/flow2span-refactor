@@ -1,0 +1,4 @@
+#!/bin/bash
+export SPLUNK_ACCESS_TOKEN=REDACTED
+export SPLUNK_REALM=us0
+export DEPLOYMENT_ENVIRONMENT=production
