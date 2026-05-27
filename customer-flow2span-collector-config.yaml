@@ -1,0 +1,1939 @@
+receivers:
+  netflow:
+    scheme: netflow
+    hostname: 0.0.0.0
+    port: 2055
+    sockets: 4
+    workers: 8
+    queue_size: 10000
+connectors:
+  flow2span:
+    window: 30s
+    flush_lag: 5s
+    max_spans_per_flush: 5000
+    max_buckets_in_memory: 240
+    environment: ${env:DEPLOYMENT_ENVIRONMENT}
+    environment_key: ${env:DEPLOYMENT_ENVIRONMENT_KEY}
+    source_address_key: source.address
+    destination_address_key: destination.address
+    source_port_key: source.port
+    destination_port_key: destination.port
+    transport_key: network.transport
+    bytes_key: flow.io.bytes
+    packets_key: flow.io.packets
+    start_key: flow.start
+    end_key: flow.end
+    tcp_flags_key: flow.tcp_flags
+    exporter_ip_key: flow.sampler_address
+    qos:
+      enabled: true
+      source_attribute: flow.tos
+      fallback_attributes:
+      - network.tos
+      - ip.tos
+      - netflow.tos
+      - flow.dscp
+      - network.dscp
+      - dscp
+      derive_dscp_from_tos: true
+      emit_on_metrics: true
+      emit_on_top_talker_metrics: true
+      emit_on_link_qos_metrics: true
+      emit_on_traces: true
+      focus_classes:
+      - voice
+      - video
+    sites:
+    - name: site-yiscsr01
+      display_name: YIS / yiscsr01
+      region: unknown
+      role: customer_site
+      direction_class: internal
+      cidrs:
+      - 10.2.0.0/21
+      - 10.2.49.0/24
+      - 10.2.104.0/24
+      - 10.2.105.0/25
+      - 10.2.105.128/25
+      - 10.2.106.0/24
+      - 10.2.107.0/24
+      - 10.2.108.0/24
+      - 10.2.109.0/25
+      - 10.2.109.128/25
+      - 10.2.110.0/24
+      - 10.22.92.0/22
+      - 10.26.96.0/21
+      - 10.28.152.0/23
+      - 10.29.76.0/24
+      - 10.30.70.0/24
+      - 10.35.133.0/24
+      - 10.56.64.0/18
+      - 10.72.32.0/21
+      - 10.72.40.0/21
+      - 10.72.48.0/20
+      - 10.82.192.0/23
+      - 10.95.1.8/29
+      - 10.95.103.64/28
+      - 10.95.103.128/27
+      - 10.154.0.0/20
+      - 10.177.131.0/24
+      - 10.178.131.0/24
+      - 10.179.131.0/24
+      - 129.248.6.64/27
+      - 129.248.6.96/27
+      - 129.248.49.0/25
+      - 129.248.49.128/25
+      - 141.188.34.0/24
+      - 141.188.131.0/25
+      - 141.188.132.0/24
+      - 141.188.133.0/24
+      - 141.188.152.0/23
+      - 141.188.154.0/23
+      - 141.188.186.0/23
+      - 172.17.134.0/25
+      - 172.24.96.48/29
+      - 172.24.97.32/29
+      labels:
+        site.code: YIS
+        source.workbook: Obser-Subnets.xlsx
+        inventory.origin: customer_subnet_workbook
+        router.name: yiscsr01
+    - name: site-wmtcsr01
+      display_name: WMT / wmtcsr01
+      region: unknown
+      role: customer_site
+      direction_class: internal
+      cidrs:
+      - 10.13.64.0/26
+      - 10.20.56.0/22
+      - 10.24.80.0/21
+      - 10.27.194.0/24
+      - 10.28.20.0/23
+      - 10.29.10.0/24
+      - 10.30.5.0/25
+      - 10.32.128.0/24
+      - 10.35.2.0/24
+      - 10.35.3.0/24
+      - 10.35.4.0/24
+      - 10.35.5.0/25
+      - 10.35.57.192/26
+      - 10.48.128.0/20
+      - 10.64.64.0/20
+      - 10.64.80.0/21
+      - 10.64.88.0/21
+      - 10.80.96.0/22
+      - 10.80.100.0/22
+      - 10.80.104.0/22
+      - 10.95.0.24/29
+      - 10.95.0.96/28
+      - 10.95.64.128/25
+      - 10.152.16.0/20
+      - 10.177.1.0/24
+      - 10.177.37.0/24
+      - 10.178.1.0/24
+      - 10.178.29.0/24
+      - 10.179.1.0/24
+      - 129.248.4.32/27
+      - 130.30.18.0/23
+      - 130.30.188.0/22
+      - 130.30.212.0/24
+      - 130.30.232.0/21
+      - 130.30.244.0/22
+      - 130.30.248.0/21
+      - 172.17.5.0/25
+      - 172.24.64.80/29
+      labels:
+        site.code: WMT
+        source.workbook: Obser-Subnets.xlsx
+        inventory.origin: customer_subnet_workbook
+        router.name: wmtcsr01
+    - name: site-wadcsr
+      display_name: WAD / wadcsr
+      region: unknown
+      role: customer_site
+      direction_class: internal
+      cidrs:
+      - 10.3.9.0/24
+      - 10.3.160.0/24
+      - 10.3.161.0/24
+      - 10.3.162.0/24
+      - 10.3.163.0/24
+      - 10.3.165.0/25
+      - 10.15.17.0/25
+      - 10.21.68.0/22
+      - 10.25.16.0/21
+      - 10.27.206.0/24
+      - 10.28.68.0/23
+      - 10.29.130.0/24
+      - 10.30.129.0/25
+      - 10.30.129.128/25
+      - 10.30.142.0/24
+      - 10.30.144.0/25
+      - 10.30.164.0/24
+      - 10.39.3.32/27
+      - 10.39.3.64/27
+      - 10.52.0.0/20
+      - 10.68.0.0/23
+      - 10.68.2.0/23
+      - 10.68.4.0/23
+      - 10.68.6.0/23
+      - 10.68.8.0/23
+      - 10.68.12.0/23
+      - 10.68.16.0/23
+      - 10.68.20.0/23
+      - 10.68.28.0/23
+      - 10.68.30.0/24
+      - 10.68.31.0/24
+      - 10.84.13.128/26
+      - 10.95.2.0/28
+      - 10.95.2.16/29
+      - 10.95.85.0/25
+      - 10.118.3.0/24
+      - 10.118.8.0/21
+      - 10.156.0.0/20
+      - 10.177.64.0/24
+      - 10.177.71.0/24
+      - 10.178.64.0/24
+      - 10.178.88.0/24
+      - 10.178.124.0/24
+      - 10.179.64.0/24
+      - 10.192.2.0/27
+      - 129.248.5.0/27
+      - 129.248.5.64/27
+      - 129.248.81.0/25
+      - 134.40.20.0/22
+      - 134.40.24.0/21
+      - 134.40.48.0/23
+      - 134.40.72.0/21
+      - 134.40.82.0/24
+      - 134.40.98.0/24
+      - 134.40.99.64/26
+      - 134.40.99.192/26
+      - 134.40.100.0/24
+      - 134.40.101.0/24
+      - 134.40.102.0/23
+      - 134.40.110.0/23
+      - 134.40.120.0/23
+      - 134.40.124.0/24
+      - 134.40.126.0/23
+      - 134.40.144.0/26
+      - 134.40.182.0/23
+      - 134.40.184.0/24
+      - 172.17.65.0/25
+      - 172.24.80.232/29
+      - 172.24.86.32/29
+      - 172.30.226.16/29
+      labels:
+        site.code: WAD
+        source.workbook: Obser-Subnets.xlsx
+        inventory.origin: customer_subnet_workbook
+        router.name: wadcsr
+    exporters:
+    - name: wmtcsr01-loopback0
+      ip: 192.168.32.33
+      site: site-wmtcsr01
+      priority: 90
+      labels:
+        source: wmtcsr01 show ip route
+      role: router
+      vendor: cisco
+      trust_level: 90
+    - name: yiscsr01-exporter
+      ip: 10.255.255.1
+      site: site-yiscsr01
+      priority: 50
+      labels:
+        source: placeholder_update_with_netflow_exporter_source_ip
+        todo: replace_with_actual_netflow_exporter_source_ip
+      role: router
+      vendor: cisco
+      trust_level: 50
+    - name: wadcsr-exporter
+      ip: 10.255.255.2
+      site: site-wadcsr
+      priority: 50
+      labels:
+        source: placeholder_update_with_netflow_exporter_source_ip
+        todo: replace_with_actual_netflow_exporter_source_ip
+      role: router
+      vendor: cisco
+      trust_level: 50
+    links:
+    - name: wad-vlan941-transit
+      site: site-wadcsr
+      interface: Vlan941
+      cidr: 172.24.80.232/29
+      labels:
+        site.code: WAD
+        network.vlan: Vlan941
+        network.vlan_name: Transit
+        route.role: transit
+        speed.note: placeholder_update_with_customer_link_speed
+      speed: 1Gbps
+      exporter: wadcsr-exporter
+      router: wadcsr-exporter
+      direction: wan
+      provider: customer
+      circuit_id: wad-vlan941-transit
+      warning_utilization_percent: 70
+      critical_utilization_percent: 85
+    - name: wad-vlan951-transit
+      site: site-wadcsr
+      interface: Vlan951
+      cidr: 172.24.86.32/29
+      labels:
+        site.code: WAD
+        network.vlan: Vlan951
+        network.vlan_name: Transit
+        route.role: transit
+        speed.note: placeholder_update_with_customer_link_speed
+      speed: 1Gbps
+      exporter: wadcsr-exporter
+      router: wadcsr-exporter
+      direction: wan
+      provider: customer
+      circuit_id: wad-vlan951-transit
+      warning_utilization_percent: 70
+      critical_utilization_percent: 85
+    - name: wad-vlan953-transit
+      site: site-wadcsr
+      interface: Vlan953
+      cidr: 172.30.226.16/29
+      labels:
+        site.code: WAD
+        network.vlan: Vlan953
+        network.vlan_name: Transit
+        route.role: transit
+        speed.note: placeholder_update_with_customer_link_speed
+      speed: 1Gbps
+      exporter: wadcsr-exporter
+      router: wadcsr-exporter
+      direction: wan
+      provider: customer
+      circuit_id: wad-vlan953-transit
+      warning_utilization_percent: 70
+      critical_utilization_percent: 85
+    - name: wmt-vlan951-transit
+      site: site-wmtcsr01
+      interface: Vlan951
+      cidr: 172.24.64.80/29
+      labels:
+        site.code: WMT
+        network.vlan: Vlan951
+        network.vlan_name: Transit
+        route.role: transit
+        speed.note: placeholder_update_with_customer_link_speed
+        route.next_hop: 172.24.64.84
+        route.note: matches wmtcsr01 default gateway from show ip route
+      speed: 1Gbps
+      exporter: wmtcsr01-loopback0
+      router: wmtcsr01-loopback0
+      direction: wan
+      provider: customer
+      circuit_id: wmt-vlan951-transit
+      warning_utilization_percent: 70
+      critical_utilization_percent: 85
+    - name: yis-vlan941-transit
+      site: site-yiscsr01
+      interface: Vlan941
+      cidr: 172.24.96.48/29
+      labels:
+        site.code: YIS
+        network.vlan: Vlan941
+        network.vlan_name: Transit
+        route.role: transit
+        speed.note: placeholder_update_with_customer_link_speed
+      speed: 1Gbps
+      exporter: yiscsr01-exporter
+      router: yiscsr01-exporter
+      direction: wan
+      provider: customer
+      circuit_id: yis-vlan941-transit
+      warning_utilization_percent: 70
+      critical_utilization_percent: 85
+    - name: yis-vlan951-transit
+      site: site-yiscsr01
+      interface: Vlan951
+      cidr: 172.24.97.32/29
+      labels:
+        site.code: YIS
+        network.vlan: Vlan951
+        network.vlan_name: Transit
+        route.role: transit
+        speed.note: placeholder_update_with_customer_link_speed
+      speed: 1Gbps
+      exporter: yiscsr01-exporter
+      router: yiscsr01-exporter
+      direction: wan
+      provider: customer
+      circuit_id: yis-vlan951-transit
+      warning_utilization_percent: 70
+      critical_utilization_percent: 85
+    client_communities:
+    - name: wad-data-vlan100
+      site: site-wadcsr
+      region: unknown
+      role: user_data
+      cidrs:
+      - 10.68.0.0/23
+      - 10.68.16.0/23
+      - 10.68.31.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan100
+        network.vlan_name: DATA
+        network.community: user_data
+        inventory.origin: customer_subnet_workbook
+    - name: wad-data-vlan101
+      site: site-wadcsr
+      region: unknown
+      role: user_data
+      cidrs:
+      - 10.68.2.0/23
+      labels:
+        site.code: WAD
+        network.vlan: Vlan101
+        network.vlan_name: DATA
+        network.community: user_data
+        inventory.origin: customer_subnet_workbook
+    - name: wad-data-vlan102
+      site: site-wadcsr
+      region: unknown
+      role: user_data
+      cidrs:
+      - 10.68.4.0/23
+      labels:
+        site.code: WAD
+        network.vlan: Vlan102
+        network.vlan_name: DATA
+        network.community: user_data
+        inventory.origin: customer_subnet_workbook
+    - name: wad-data-vlan103
+      site: site-wadcsr
+      region: unknown
+      role: user_data
+      cidrs:
+      - 10.68.6.0/23
+      labels:
+        site.code: WAD
+        network.vlan: Vlan103
+        network.vlan_name: DATA
+        network.community: user_data
+        inventory.origin: customer_subnet_workbook
+    - name: wad-data-vlan104
+      site: site-wadcsr
+      region: unknown
+      role: user_data
+      cidrs:
+      - 10.68.8.0/23
+      - 10.68.20.0/23
+      - 10.68.30.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan104
+        network.vlan_name: DATA
+        network.community: user_data
+        inventory.origin: customer_subnet_workbook
+    - name: wad-data-vlan105
+      site: site-wadcsr
+      region: unknown
+      role: user_data
+      cidrs:
+      - 10.68.28.0/23
+      labels:
+        site.code: WAD
+        network.vlan: Vlan105
+        network.vlan_name: DATA
+        network.community: user_data
+        inventory.origin: customer_subnet_workbook
+    - name: wad-data-vlan106
+      site: site-wadcsr
+      region: unknown
+      role: user_data
+      cidrs:
+      - 10.68.12.0/23
+      labels:
+        site.code: WAD
+        network.vlan: Vlan106
+        network.vlan_name: DATA
+        network.community: user_data
+        inventory.origin: customer_subnet_workbook
+    - name: wad-dc-vlan1700
+      site: site-wadcsr
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.3.161.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan1700
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: wad-dc-vlan1701
+      site: site-wadcsr
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.39.3.32/27
+      labels:
+        site.code: WAD
+        network.vlan: Vlan1701
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: wad-dc-vlan1702
+      site: site-wadcsr
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.39.3.64/27
+      labels:
+        site.code: WAD
+        network.vlan: Vlan1702
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: wad-dc-vlan1703
+      site: site-wadcsr
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.15.17.0/25
+      labels:
+        site.code: WAD
+        network.vlan: Vlan1703
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: wad-dc-vlan1720
+      site: site-wadcsr
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.3.165.0/25
+      labels:
+        site.code: WAD
+        network.vlan: Vlan1720
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: wad-dc-vlan1741
+      site: site-wadcsr
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.3.9.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan1741
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: wad-dc-vlan1750
+      site: site-wadcsr
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.3.163.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan1750
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: wad-dc-vlan1761
+      site: site-wadcsr
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.3.160.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan1761
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: wad-dc-vlan1762
+      site: site-wadcsr
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.3.162.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan1762
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: wad-dc-vlan1763
+      site: site-wadcsr
+      region: unknown
+      role: data_center
+      cidrs:
+      - 129.248.81.0/25
+      labels:
+        site.code: WAD
+        network.vlan: Vlan1763
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: wad-guest-vlan25
+      site: site-wadcsr
+      region: unknown
+      role: guest
+      cidrs:
+      - 172.17.65.0/25
+      labels:
+        site.code: WAD
+        network.vlan: Vlan25
+        network.vlan_name: Guest
+        network.community: guest
+        inventory.origin: customer_subnet_workbook
+    - name: wad-ignite-vlan155
+      site: site-wadcsr
+      region: unknown
+      role: ignite
+      cidrs:
+      - 10.156.0.0/20
+      labels:
+        site.code: WAD
+        network.vlan: Vlan155
+        network.vlan_name: Ignite
+        network.community: ignite
+        inventory.origin: customer_subnet_workbook
+    - name: wad-instrument-vlan300
+      site: site-wadcsr
+      region: unknown
+      role: instrumentation
+      cidrs:
+      - 10.84.13.128/26
+      labels:
+        site.code: WAD
+        network.vlan: Vlan300
+        network.vlan_name: Instrument
+        network.community: instrumentation
+        inventory.origin: customer_subnet_workbook
+    - name: wad-mfg-vlan500
+      site: site-wadcsr
+      region: unknown
+      role: manufacturing
+      cidrs:
+      - 10.118.8.0/21
+      - 134.40.72.0/21
+      labels:
+        site.code: WAD
+        network.vlan: Vlan500
+        network.vlan_name: MFG
+        network.community: manufacturing
+        inventory.origin: customer_subnet_workbook
+    - name: wad-mfg-vlan501
+      site: site-wadcsr
+      region: unknown
+      role: manufacturing
+      cidrs:
+      - 134.40.98.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan501
+        network.vlan_name: MFG
+        network.community: manufacturing
+        inventory.origin: customer_subnet_workbook
+    - name: wad-mfg-vlan502
+      site: site-wadcsr
+      region: unknown
+      role: manufacturing
+      cidrs:
+      - 134.40.144.0/26
+      labels:
+        site.code: WAD
+        network.vlan: Vlan502
+        network.vlan_name: MFG
+        network.community: manufacturing
+        inventory.origin: customer_subnet_workbook
+    - name: wad-mfg-vlan503
+      site: site-wadcsr
+      region: unknown
+      role: manufacturing
+      cidrs:
+      - 134.40.48.0/23
+      labels:
+        site.code: WAD
+        network.vlan: Vlan503
+        network.vlan_name: MFG
+        network.community: manufacturing
+        inventory.origin: customer_subnet_workbook
+    - name: wad-mfg-vlan504
+      site: site-wadcsr
+      region: unknown
+      role: manufacturing
+      cidrs:
+      - 134.40.124.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan504
+        network.vlan_name: MFG
+        network.community: manufacturing
+        inventory.origin: customer_subnet_workbook
+    - name: wad-mfg-vlan505
+      site: site-wadcsr
+      region: unknown
+      role: manufacturing
+      cidrs:
+      - 10.118.3.0/24
+      - 134.40.99.64/26
+      labels:
+        site.code: WAD
+        network.vlan: Vlan505
+        network.vlan_name: MFG
+        network.community: manufacturing
+        inventory.origin: customer_subnet_workbook
+    - name: wad-mgmt-vlan999
+      site: site-wadcsr
+      region: unknown
+      role: management
+      cidrs:
+      - 10.177.64.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan999
+        network.vlan_name: MGMT
+        network.community: management
+        inventory.origin: customer_subnet_workbook
+    - name: wad-mgt-vlan999
+      site: site-wadcsr
+      region: unknown
+      role: management
+      cidrs:
+      - 10.177.71.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan999
+        network.vlan_name: MGT
+        network.community: management
+        inventory.origin: customer_subnet_workbook
+    - name: wad-nm-vlan900
+      site: site-wadcsr
+      region: unknown
+      role: network_management
+      cidrs:
+      - 10.178.64.0/24
+      - 10.178.88.0/24
+      - 10.178.124.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan900
+        network.vlan_name: NM
+        network.community: network_management
+        inventory.origin: customer_subnet_workbook
+    - name: wad-ns-vlan910
+      site: site-wadcsr
+      region: unknown
+      role: network_services
+      cidrs:
+      - 10.179.64.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan910
+        network.vlan_name: NS
+        network.community: network_services
+        inventory.origin: customer_subnet_workbook
+    - name: wad-oe-vlan30
+      site: site-wadcsr
+      region: unknown
+      role: operations_engineering
+      cidrs:
+      - 10.28.68.0/23
+      labels:
+        site.code: WAD
+        network.vlan: Vlan30
+        network.vlan_name: OE
+        network.community: operations_engineering
+        inventory.origin: customer_subnet_workbook
+    - name: wad-quar-vlan21
+      site: site-wadcsr
+      region: unknown
+      role: quarantine
+      cidrs:
+      - 10.21.68.0/22
+      labels:
+        site.code: WAD
+        network.vlan: Vlan21
+        network.vlan_name: Quar
+        network.community: quarantine
+        inventory.origin: customer_subnet_workbook
+    - name: wad-rnd-vlan400
+      site: site-wadcsr
+      region: unknown
+      role: research_and_development
+      cidrs:
+      - 134.40.24.0/21
+      - 134.40.101.0/24
+      - 134.40.102.0/23
+      - 134.40.110.0/23
+      - 134.40.120.0/23
+      - 134.40.182.0/23
+      - 134.40.184.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan400
+        network.vlan_name: RnD
+        network.community: research_and_development
+        inventory.origin: customer_subnet_workbook
+    - name: wad-rnd-vlan401
+      site: site-wadcsr
+      region: unknown
+      role: research_and_development
+      cidrs:
+      - 134.40.99.192/26
+      - 134.40.100.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan401
+        network.vlan_name: RnD
+        network.community: research_and_development
+        inventory.origin: customer_subnet_workbook
+    - name: wad-rnd-vlan402
+      site: site-wadcsr
+      region: unknown
+      role: research_and_development
+      cidrs:
+      - 134.40.82.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan402
+        network.vlan_name: RnD
+        network.community: research_and_development
+        inventory.origin: customer_subnet_workbook
+    - name: wad-rnd-vlan404
+      site: site-wadcsr
+      region: unknown
+      role: research_and_development
+      cidrs:
+      - 10.192.2.0/27
+      labels:
+        site.code: WAD
+        network.vlan: Vlan404
+        network.vlan_name: RnD
+        network.community: research_and_development
+        inventory.origin: customer_subnet_workbook
+    - name: wad-rnd-vlan405
+      site: site-wadcsr
+      region: unknown
+      role: research_and_development
+      cidrs:
+      - 134.40.20.0/22
+      - 134.40.126.0/23
+      labels:
+        site.code: WAD
+        network.vlan: Vlan405
+        network.vlan_name: RnD
+        network.community: research_and_development
+        inventory.origin: customer_subnet_workbook
+    - name: wad-sitesec-vlan700
+      site: site-wadcsr
+      region: unknown
+      role: site_security
+      cidrs:
+      - 10.30.129.0/25
+      - 10.30.129.128/25
+      - 10.30.144.0/25
+      - 10.30.164.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan700
+        network.vlan_name: SiteSec
+        network.community: site_security
+        inventory.origin: customer_subnet_workbook
+    - name: wad-sitesec-vlan710
+      site: site-wadcsr
+      region: unknown
+      role: site_security
+      cidrs:
+      - 10.29.130.0/24
+      - 10.30.142.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan710
+        network.vlan_name: SiteSec
+        network.community: site_security
+        inventory.origin: customer_subnet_workbook
+    - name: wad-tp-vlan36
+      site: site-wadcsr
+      region: unknown
+      role: third_party
+      cidrs:
+      - 10.95.2.0/28
+      - 10.95.2.16/29
+      - 10.95.85.0/25
+      labels:
+        site.code: WAD
+        network.vlan: Vlan36
+        network.vlan_name: TP
+        network.community: third_party
+        inventory.origin: customer_subnet_workbook
+    - name: wad-vgw-vlan640
+      site: site-wadcsr
+      region: unknown
+      role: voice_gateway
+      cidrs:
+      - 129.248.5.0/27
+      - 129.248.5.64/27
+      labels:
+        site.code: WAD
+        network.vlan: Vlan640
+        network.vlan_name: VGW
+        network.community: voice_gateway
+        inventory.origin: customer_subnet_workbook
+    - name: wad-voice-vlan600
+      site: site-wadcsr
+      region: unknown
+      role: voice
+      cidrs:
+      - 10.25.16.0/21
+      labels:
+        site.code: WAD
+        network.vlan: Vlan600
+        network.vlan_name: Voice
+        network.community: voice
+        inventory.origin: customer_subnet_workbook
+    - name: wad-voice-vlan610
+      site: site-wadcsr
+      region: unknown
+      role: voice
+      cidrs:
+      - 10.27.206.0/24
+      labels:
+        site.code: WAD
+        network.vlan: Vlan610
+        network.vlan_name: Voice
+        network.community: voice
+        inventory.origin: customer_subnet_workbook
+    - name: wad-wireless-vlan150
+      site: site-wadcsr
+      region: unknown
+      role: wireless
+      cidrs:
+      - 10.52.0.0/20
+      labels:
+        site.code: WAD
+        network.vlan: Vlan150
+        network.vlan_name: Wireless
+        network.community: wireless
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-data-vlan100
+      site: site-wmtcsr01
+      region: unknown
+      role: user_data
+      cidrs:
+      - 10.64.64.0/20
+      labels:
+        site.code: WMT
+        network.vlan: Vlan100
+        network.vlan_name: DATA
+        network.community: user_data
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-data-vlan101
+      site: site-wmtcsr01
+      region: unknown
+      role: user_data
+      cidrs:
+      - 10.64.80.0/21
+      labels:
+        site.code: WMT
+        network.vlan: Vlan101
+        network.vlan_name: DATA
+        network.community: user_data
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-data-vlan102
+      site: site-wmtcsr01
+      region: unknown
+      role: user_data
+      cidrs:
+      - 10.64.88.0/21
+      labels:
+        site.code: WMT
+        network.vlan: Vlan102
+        network.vlan_name: DATA
+        network.community: user_data
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-dc-vlan1700
+      site: site-wmtcsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.35.2.0/24
+      labels:
+        site.code: WMT
+        network.vlan: Vlan1700
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-dc-vlan1701
+      site: site-wmtcsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 130.30.212.0/24
+      labels:
+        site.code: WMT
+        network.vlan: Vlan1701
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-dc-vlan1702
+      site: site-wmtcsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.35.57.192/26
+      labels:
+        site.code: WMT
+        network.vlan: Vlan1702
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-dc-vlan1740
+      site: site-wmtcsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.32.128.0/24
+      labels:
+        site.code: WMT
+        network.vlan: Vlan1740
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-dc-vlan1741
+      site: site-wmtcsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.35.3.0/24
+      labels:
+        site.code: WMT
+        network.vlan: Vlan1741
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-dc-vlan1748
+      site: site-wmtcsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.35.5.0/25
+      labels:
+        site.code: WMT
+        network.vlan: Vlan1748
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-dc-vlan1750
+      site: site-wmtcsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.35.4.0/24
+      labels:
+        site.code: WMT
+        network.vlan: Vlan1750
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-guest-vlan25
+      site: site-wmtcsr01
+      region: unknown
+      role: guest
+      cidrs:
+      - 172.17.5.0/25
+      labels:
+        site.code: WMT
+        network.vlan: Vlan25
+        network.vlan_name: Guest
+        network.community: guest
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-ignite-vlan155
+      site: site-wmtcsr01
+      region: unknown
+      role: ignite
+      cidrs:
+      - 10.152.16.0/20
+      labels:
+        site.code: WMT
+        network.vlan: Vlan155
+        network.vlan_name: Ignite
+        network.community: ignite
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-instrument-vlan300
+      site: site-wmtcsr01
+      region: unknown
+      role: instrumentation
+      cidrs:
+      - 10.80.96.0/22
+      labels:
+        site.code: WMT
+        network.vlan: Vlan300
+        network.vlan_name: Instrument
+        network.community: instrumentation
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-instrument-vlan301
+      site: site-wmtcsr01
+      region: unknown
+      role: instrumentation
+      cidrs:
+      - 10.80.100.0/22
+      labels:
+        site.code: WMT
+        network.vlan: Vlan301
+        network.vlan_name: Instrument
+        network.community: instrumentation
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-instrument-vlan302
+      site: site-wmtcsr01
+      region: unknown
+      role: instrumentation
+      cidrs:
+      - 10.80.104.0/22
+      labels:
+        site.code: WMT
+        network.vlan: Vlan302
+        network.vlan_name: Instrument
+        network.community: instrumentation
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-isolated-vlan820
+      site: site-wmtcsr01
+      region: unknown
+      role: isolated
+      cidrs:
+      - 10.13.64.0/26
+      labels:
+        site.code: WMT
+        network.vlan: Vlan820
+        network.vlan_name: Isolated
+        network.community: isolated
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-mfg-vlan400
+      site: site-wmtcsr01
+      region: unknown
+      role: manufacturing
+      cidrs:
+      - 130.30.244.0/22
+      - 130.30.248.0/21
+      labels:
+        site.code: WMT
+        network.vlan: Vlan400
+        network.vlan_name: MFG
+        network.community: manufacturing
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-mfg-vlan500
+      site: site-wmtcsr01
+      region: unknown
+      role: manufacturing
+      cidrs:
+      - 130.30.188.0/22
+      - 130.30.232.0/21
+      labels:
+        site.code: WMT
+        network.vlan: Vlan500
+        network.vlan_name: MFG
+        network.community: manufacturing
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-mgmt-vlan999
+      site: site-wmtcsr01
+      region: unknown
+      role: management
+      cidrs:
+      - 10.177.1.0/24
+      - 10.177.37.0/24
+      labels:
+        site.code: WMT
+        network.vlan: Vlan999
+        network.vlan_name: MGMT
+        network.community: management
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-nm-vlan900
+      site: site-wmtcsr01
+      region: unknown
+      role: network_management
+      cidrs:
+      - 10.178.1.0/24
+      labels:
+        site.code: WMT
+        network.vlan: Vlan900
+        network.vlan_name: NM
+        network.community: network_management
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-nm-vlan901
+      site: site-wmtcsr01
+      region: unknown
+      role: network_management
+      cidrs:
+      - 10.178.29.0/24
+      labels:
+        site.code: WMT
+        network.vlan: Vlan901
+        network.vlan_name: NM
+        network.community: network_management
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-ns-vlan910
+      site: site-wmtcsr01
+      region: unknown
+      role: network_services
+      cidrs:
+      - 10.179.1.0/24
+      labels:
+        site.code: WMT
+        network.vlan: Vlan910
+        network.vlan_name: NS
+        network.community: network_services
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-oe-vlan30
+      site: site-wmtcsr01
+      region: unknown
+      role: operations_engineering
+      cidrs:
+      - 10.28.20.0/23
+      labels:
+        site.code: WMT
+        network.vlan: Vlan30
+        network.vlan_name: OE
+        network.community: operations_engineering
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-quar-vlan21
+      site: site-wmtcsr01
+      region: unknown
+      role: quarantine
+      cidrs:
+      - 10.20.56.0/22
+      labels:
+        site.code: WMT
+        network.vlan: Vlan21
+        network.vlan_name: Quar
+        network.community: quarantine
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-rnd-vlan400
+      site: site-wmtcsr01
+      region: unknown
+      role: research_and_development
+      cidrs:
+      - 130.30.18.0/23
+      labels:
+        site.code: WMT
+        network.vlan: Vlan400
+        network.vlan_name: RnD
+        network.community: research_and_development
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-sitesec-vlan700
+      site: site-wmtcsr01
+      region: unknown
+      role: site_security
+      cidrs:
+      - 10.30.5.0/25
+      labels:
+        site.code: WMT
+        network.vlan: Vlan700
+        network.vlan_name: SiteSec
+        network.community: site_security
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-sitesec-vlan710
+      site: site-wmtcsr01
+      region: unknown
+      role: site_security
+      cidrs:
+      - 10.29.10.0/24
+      labels:
+        site.code: WMT
+        network.vlan: Vlan710
+        network.vlan_name: SiteSec
+        network.community: site_security
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-tp-vlan36
+      site: site-wmtcsr01
+      region: unknown
+      role: third_party
+      cidrs:
+      - 10.95.0.24/29
+      - 10.95.0.96/28
+      - 10.95.64.128/25
+      labels:
+        site.code: WMT
+        network.vlan: Vlan36
+        network.vlan_name: TP
+        network.community: third_party
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-vgw-vlan640
+      site: site-wmtcsr01
+      region: unknown
+      role: voice_gateway
+      cidrs:
+      - 129.248.4.32/27
+      labels:
+        site.code: WMT
+        network.vlan: Vlan640
+        network.vlan_name: VGW
+        network.community: voice_gateway
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-voice-vlan600
+      site: site-wmtcsr01
+      region: unknown
+      role: voice
+      cidrs:
+      - 10.24.80.0/21
+      labels:
+        site.code: WMT
+        network.vlan: Vlan600
+        network.vlan_name: Voice
+        network.community: voice
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-voice-vlan610
+      site: site-wmtcsr01
+      region: unknown
+      role: voice
+      cidrs:
+      - 10.27.194.0/24
+      labels:
+        site.code: WMT
+        network.vlan: Vlan610
+        network.vlan_name: Voice
+        network.community: voice
+        inventory.origin: customer_subnet_workbook
+    - name: wmt-wireless-vlan150
+      site: site-wmtcsr01
+      region: unknown
+      role: wireless
+      cidrs:
+      - 10.48.128.0/20
+      labels:
+        site.code: WMT
+        network.vlan: Vlan150
+        network.vlan_name: Wireless
+        network.community: wireless
+        inventory.origin: customer_subnet_workbook
+    - name: yis-data-vlan100
+      site: site-yiscsr01
+      region: unknown
+      role: user_data
+      cidrs:
+      - 10.72.32.0/21
+      labels:
+        site.code: YIS
+        network.vlan: Vlan100
+        network.vlan_name: DATA
+        network.community: user_data
+        inventory.origin: customer_subnet_workbook
+    - name: yis-data-vlan101
+      site: site-yiscsr01
+      region: unknown
+      role: user_data
+      cidrs:
+      - 10.72.40.0/21
+      labels:
+        site.code: YIS
+        network.vlan: Vlan101
+        network.vlan_name: DATA
+        network.community: user_data
+        inventory.origin: customer_subnet_workbook
+    - name: yis-data-vlan102
+      site: site-yiscsr01
+      region: unknown
+      role: user_data
+      cidrs:
+      - 10.72.48.0/20
+      labels:
+        site.code: YIS
+        network.vlan: Vlan102
+        network.vlan_name: DATA
+        network.community: user_data
+        inventory.origin: customer_subnet_workbook
+    - name: yis-dc-vlan1240
+      site: site-yiscsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.35.133.0/24
+      labels:
+        site.code: YIS
+        network.vlan: Vlan1240
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: yis-dc-vlan1700
+      site: site-yiscsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.2.106.0/24
+      labels:
+        site.code: YIS
+        network.vlan: Vlan1700
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: yis-dc-vlan1701
+      site: site-yiscsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.2.109.128/25
+      labels:
+        site.code: YIS
+        network.vlan: Vlan1701
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: yis-dc-vlan1702
+      site: site-yiscsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.2.107.0/24
+      labels:
+        site.code: YIS
+        network.vlan: Vlan1702
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: yis-dc-vlan1720
+      site: site-yiscsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.2.108.0/24
+      labels:
+        site.code: YIS
+        network.vlan: Vlan1720
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: yis-dc-vlan1722
+      site: site-yiscsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.2.109.0/25
+      labels:
+        site.code: YIS
+        network.vlan: Vlan1722
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: yis-dc-vlan1740
+      site: site-yiscsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.2.105.0/25
+      labels:
+        site.code: YIS
+        network.vlan: Vlan1740
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: yis-dc-vlan1741
+      site: site-yiscsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.2.105.128/25
+      labels:
+        site.code: YIS
+        network.vlan: Vlan1741
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: yis-dc-vlan1750
+      site: site-yiscsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.2.0.0/21
+      - 10.2.104.0/24
+      labels:
+        site.code: YIS
+        network.vlan: Vlan1750
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: yis-dc-vlan1751
+      site: site-yiscsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.2.49.0/24
+      labels:
+        site.code: YIS
+        network.vlan: Vlan1751
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: yis-dc-vlan1760
+      site: site-yiscsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 10.2.110.0/24
+      labels:
+        site.code: YIS
+        network.vlan: Vlan1760
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: yis-dc-vlan1761
+      site: site-yiscsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 129.248.49.0/25
+      labels:
+        site.code: YIS
+        network.vlan: Vlan1761
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: yis-dc-vlan1762
+      site: site-yiscsr01
+      region: unknown
+      role: data_center
+      cidrs:
+      - 129.248.49.128/25
+      labels:
+        site.code: YIS
+        network.vlan: Vlan1762
+        network.vlan_name: DC
+        network.community: data_center
+        inventory.origin: customer_subnet_workbook
+    - name: yis-guest-vlan21
+      site: site-yiscsr01
+      region: unknown
+      role: guest
+      cidrs:
+      - 10.22.92.0/22
+      labels:
+        site.code: YIS
+        network.vlan: Vlan21
+        network.vlan_name: Guest
+        network.community: guest
+        inventory.origin: customer_subnet_workbook
+    - name: yis-instrument-vlan300
+      site: site-yiscsr01
+      region: unknown
+      role: instrumentation
+      cidrs:
+      - 10.82.192.0/23
+      labels:
+        site.code: YIS
+        network.vlan: Vlan300
+        network.vlan_name: Instrument
+        network.community: instrumentation
+        inventory.origin: customer_subnet_workbook
+    - name: yis-mfg-vlan500
+      site: site-yiscsr01
+      region: unknown
+      role: manufacturing
+      cidrs:
+      - 141.188.34.0/24
+      labels:
+        site.code: YIS
+        network.vlan: Vlan500
+        network.vlan_name: MFG
+        network.community: manufacturing
+        inventory.origin: customer_subnet_workbook
+    - name: yis-mfg-vlan501
+      site: site-yiscsr01
+      region: unknown
+      role: manufacturing
+      cidrs:
+      - 141.188.186.0/23
+      labels:
+        site.code: YIS
+        network.vlan: Vlan501
+        network.vlan_name: MFG
+        network.community: manufacturing
+        inventory.origin: customer_subnet_workbook
+    - name: yis-mfg-vlan503
+      site: site-yiscsr01
+      region: unknown
+      role: manufacturing
+      cidrs:
+      - 141.188.152.0/23
+      - 141.188.154.0/23
+      labels:
+        site.code: YIS
+        network.vlan: Vlan503
+        network.vlan_name: MFG
+        network.community: manufacturing
+        inventory.origin: customer_subnet_workbook
+    - name: yis-mgmt-vlan999
+      site: site-yiscsr01
+      region: unknown
+      role: management
+      cidrs:
+      - 10.177.131.0/24
+      labels:
+        site.code: YIS
+        network.vlan: Vlan999
+        network.vlan_name: Mgmt
+        network.community: management
+        inventory.origin: customer_subnet_workbook
+    - name: yis-nm-vlan900
+      site: site-yiscsr01
+      region: unknown
+      role: network_management
+      cidrs:
+      - 10.178.131.0/24
+      labels:
+        site.code: YIS
+        network.vlan: Vlan900
+        network.vlan_name: NM
+        network.community: network_management
+        inventory.origin: customer_subnet_workbook
+    - name: yis-ns-vlan910
+      site: site-yiscsr01
+      region: unknown
+      role: network_services
+      cidrs:
+      - 10.179.131.0/24
+      labels:
+        site.code: YIS
+        network.vlan: Vlan910
+        network.vlan_name: NS
+        network.community: network_services
+        inventory.origin: customer_subnet_workbook
+    - name: yis-oe-vlan30
+      site: site-yiscsr01
+      region: unknown
+      role: operations_engineering
+      cidrs:
+      - 10.28.152.0/23
+      labels:
+        site.code: YIS
+        network.vlan: Vlan30
+        network.vlan_name: OE
+        network.community: operations_engineering
+        inventory.origin: customer_subnet_workbook
+    - name: yis-rnd-vlan400
+      site: site-yiscsr01
+      region: unknown
+      role: research_and_development
+      cidrs:
+      - 141.188.131.0/25
+      - 141.188.132.0/24
+      labels:
+        site.code: YIS
+        network.vlan: Vlan400
+        network.vlan_name: RnD
+        network.community: research_and_development
+        inventory.origin: customer_subnet_workbook
+    - name: yis-rnd-vlan402
+      site: site-yiscsr01
+      region: unknown
+      role: research_and_development
+      cidrs:
+      - 141.188.133.0/24
+      labels:
+        site.code: YIS
+        network.vlan: Vlan402
+        network.vlan_name: RnD
+        network.community: research_and_development
+        inventory.origin: customer_subnet_workbook
+    - name: yis-sitesec-vlan700
+      site: site-yiscsr01
+      region: unknown
+      role: site_security
+      cidrs:
+      - 10.30.70.0/24
+      labels:
+        site.code: YIS
+        network.vlan: Vlan700
+        network.vlan_name: SiteSec
+        network.community: site_security
+        inventory.origin: customer_subnet_workbook
+    - name: yis-sitesec-vlan710
+      site: site-yiscsr01
+      region: unknown
+      role: site_security
+      cidrs:
+      - 10.29.76.0/24
+      labels:
+        site.code: YIS
+        network.vlan: Vlan710
+        network.vlan_name: SiteSec
+        network.community: site_security
+        inventory.origin: customer_subnet_workbook
+    - name: yis-tp-vlan36
+      site: site-yiscsr01
+      region: unknown
+      role: third_party
+      cidrs:
+      - 10.95.1.8/29
+      - 10.95.103.64/28
+      - 10.95.103.128/27
+      labels:
+        site.code: YIS
+        network.vlan: Vlan36
+        network.vlan_name: TP
+        network.community: third_party
+        inventory.origin: customer_subnet_workbook
+    - name: yis-unregister-vlan25
+      site: site-yiscsr01
+      region: unknown
+      role: unregistered
+      cidrs:
+      - 172.17.134.0/25
+      labels:
+        site.code: YIS
+        network.vlan: Vlan25
+        network.vlan_name: Unregister
+        network.community: unregistered
+        inventory.origin: customer_subnet_workbook
+    - name: yis-vgw-vlan640
+      site: site-yiscsr01
+      region: unknown
+      role: voice_gateway
+      cidrs:
+      - 129.248.6.64/27
+      - 129.248.6.96/27
+      labels:
+        site.code: YIS
+        network.vlan: Vlan640
+        network.vlan_name: VGW
+        network.community: voice_gateway
+        inventory.origin: customer_subnet_workbook
+    - name: yis-voice-vlan600
+      site: site-yiscsr01
+      region: unknown
+      role: voice
+      cidrs:
+      - 10.26.96.0/21
+      labels:
+        site.code: YIS
+        network.vlan: Vlan600
+        network.vlan_name: Voice
+        network.community: voice
+        inventory.origin: customer_subnet_workbook
+    - name: yis-wireless-vlan150
+      site: site-yiscsr01
+      region: unknown
+      role: wireless
+      cidrs:
+      - 10.56.64.0/18
+      labels:
+        site.code: YIS
+        network.vlan: Vlan150
+        network.vlan_name: Wireless
+        network.community: wireless
+        inventory.origin: customer_subnet_workbook
+    - name: yis-wireless-vlan155
+      site: site-yiscsr01
+      region: unknown
+      role: wireless
+      cidrs:
+      - 10.154.0.0/20
+      labels:
+        site.code: YIS
+        network.vlan: Vlan155
+        network.vlan_name: Wireless
+        network.community: wireless
+        inventory.origin: customer_subnet_workbook
+    server_communities:
+    - name: wmt-default-route-bgp
+      site: remote-wan
+      region: unknown
+      role: default_route
+      cidrs:
+      - 0.0.0.0/0
+      labels:
+        route.source: bgp
+        route.next_hop: 172.24.64.84
+        source.device: wmtcsr01
+    - name: wmt-remote-10-5-212-0-22
+      site: remote-wan
+      region: unknown
+      role: remote_route
+      cidrs:
+      - 10.5.212.0/22
+      labels:
+        route.source: bgp
+        route.next_hop: 172.24.64.84
+        source.device: wmtcsr01
+    - name: wmt-remote-10-20-33-0-24
+      site: remote-wan
+      region: unknown
+      role: remote_route
+      cidrs:
+      - 10.20.33.0/24
+      labels:
+        route.source: bgp
+        route.next_hop: 172.24.64.84
+        source.device: wmtcsr01
+    - name: wmt-remote-10-29-0-128-26
+      site: remote-wan
+      region: unknown
+      role: remote_route
+      cidrs:
+      - 10.29.0.128/26
+      labels:
+        route.source: bgp
+        route.next_hop: 172.24.64.84
+        source.device: wmtcsr01
+    - name: wmt-remote-10-29-2-0-24
+      site: remote-wan
+      region: unknown
+      role: remote_route
+      cidrs:
+      - 10.29.2.0/24
+      labels:
+        route.source: bgp
+        route.next_hop: 172.24.64.84
+        source.device: wmtcsr01
+    - name: wmt-remote-10-179-21-0-26
+      site: remote-wan
+      region: unknown
+      role: remote_route
+      cidrs:
+      - 10.179.21.0/26
+      labels:
+        route.source: bgp
+        route.next_hop: 172.24.64.84
+        source.device: wmtcsr01
+    - name: wmt-remote-129-248-4-129-32
+      site: remote-wan
+      region: unknown
+      role: remote_route
+      cidrs:
+      - 129.248.4.129/32
+      labels:
+        route.source: static
+        route.next_hop: 129.248.4.34
+        source.device: wmtcsr01
+    - name: wmt-remote-129-248-13-40-32
+      site: remote-wan
+      region: unknown
+      role: remote_route
+      cidrs:
+      - 129.248.13.40/32
+      labels:
+        route.source: static
+        route.next_hop: 129.248.4.34
+        source.device: wmtcsr01
+    - name: wmt-remote-192-168-32-34-32
+      site: remote-wan
+      region: unknown
+      role: remote_route
+      cidrs:
+      - 192.168.32.34/32
+      labels:
+        route.source: static
+        route.next_hop: 129.248.4.34
+        source.device: wmtcsr01
+    - name: wmt-remote-192-168-255-12-32
+      site: remote-wan
+      region: unknown
+      role: remote_route
+      cidrs:
+      - 192.168.255.12/32
+      labels:
+        route.source: bgp
+        route.next_hop: 10.179.1.31
+        source.device: wmtcsr01
+    deduplication:
+      enabled: true
+      window: 30s
+      strategy: prefer_highest_priority
+      bidirectional: true
+      normalize_nat: false
+      match_tolerance_percent: 15
+      packet_tolerance_percent: 20
+      include_dedupe_attributes: true
+      priority_roles:
+        firewall: 100
+        edge_router: 90
+        sdwan_router: 80
+        core_router: 70
+        router: 70
+        switch: 50
+        unknown: 10
+      scopes:
+        site_traffic: prefer_highest_priority
+        link_utilization: prefer_link_exporter
+        top_talkers: prefer_highest_priority
+    service_map:
+      enabled: true
+      node_type: endpoint_dns
+      include_application_span: false
+      emit_peer_service_links: true
+      service_namespace: flow2span.customer_network
+    dns:
+      enabled: true
+      lookup_mode: reverse
+      timeout: 250ms
+      max_concurrent_lookups: 50
+      cache_ttl: 24h
+      negative_cache_ttl: 10m
+      lookup_private_ips: true
+      lookup_public_ips: false
+      include_dns_attributes: true
+      include_unresolved_attribute: true
+      sanitize_names: true
+      strip_trailing_dot: true
+      block_on_lookup: false
+      emit_on_top_talker_metrics: true
+      emit_on_represented_traces: true
+    top_talkers:
+      enabled: true
+      limit: 20
+      rank_by: bytes
+      scopes:
+      - global
+      - site
+      - link
+      - community_dependency
+      emit_metrics: true
+      emit_traces: true
+      include_trace_id_attribute: false
+      include_span_id_attribute: false
+      drop_trace_id_dimension_for_metrics: true
+      include_dedupe_dimensions: true
+      max_series_per_window: 10000
+processors:
+  memory_limiter:
+    check_interval: 2s
+    limit_mib: 2048
+  batch: {}
+exporters:
+  debug:
+    verbosity: detailed
+  signalfx:
+    access_token: ${env:SPLUNK_ACCESS_TOKEN}
+    realm: ${env:SPLUNK_REALM}
+  otlphttp/splunktraces:
+    traces_endpoint: https://ingest.${env:SPLUNK_REALM}.signalfx.com/v2/trace/otlp
+    headers:
+      X-SF-TOKEN: ${env:SPLUNK_ACCESS_TOKEN}
+service:
+  pipelines:
+    logs:
+      receivers:
+      - netflow
+      processors:
+      - memory_limiter
+      - batch
+      exporters:
+      - flow2span
+    traces:
+      receivers:
+      - flow2span
+      processors:
+      - batch
+      exporters:
+      - debug
+      - otlphttp/splunktraces
+    metrics:
+      receivers:
+      - flow2span
+      processors:
+      - batch
+      exporters:
+      - debug
+      - signalfx
